@@ -1,0 +1,57 @@
+{% extends 'bookings/base.html' %}
+
+{% block title %}Movie List{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">🎥 Available Movies</h2>
+        
+        {% if movies %}
+        <div class="row">
+            {% for movie in movies %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <p class="card-text">{{ movie.description }}</p>
+                        <p class="text-muted">
+                            <strong>Release Date:</strong> {{ movie.release_date }}<br>
+                            <strong>Duration:</strong> {{ movie.duration }} minutes
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'book_seat' movie.id %}" class="btn btn-primary w-100">
+                            Book Seats
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <h4>No movies available at the moment.</h4>
+            <p>Please check back later or contact the administrator.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h3 class="card-title">API Endpoints</h3>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>Movies API:</strong> <a href="/api/movies/" target="_blank">/api/movies/</a>
+            </li>
+            <li class="list-group-item">
+                <strong>Seats API:</strong> <a href="/api/seats/" target="_blank">/api/seats/</a>
+            </li>
+            <li class="list-group-item">
+                <strong>Bookings API:</strong> <a href="/api/bookings/" target="_blank">/api/bookings/</a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'bookings/base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">📋 My Booking History</h2>
+        
+        {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Movie</th>
+                        <th>Seat Number</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>
+                            <strong>{{ booking.movie.title }}</strong><br>
+                            <small class="text-muted">{{ booking.movie.duration }} min</small>
+                        </td>
+                        <td><span class="badge bg-primary">{{ booking.seat.seat_number }}</span></td>
+                        <td>{{ booking.booking_date|date:"M d, Y H:i" }}</td>
+                        <td><span class="badge bg-success">Confirmed</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <h4>No bookings yet!</h4>
+            <p>Start by booking a seat for one of our amazing movies.</p>
+            <a href="{% url 'movie_list' %}" class="btn btn-primary">Browse Movies</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if bookings %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Booking Summary</h5>
+        <p><strong>Total Bookings:</strong> {{ bookings.count }}</p>
+        <a href="{% url 'movie_list' %}" class="btn btn-primary">Book More Seats</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

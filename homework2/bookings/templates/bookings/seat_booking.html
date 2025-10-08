@@ -1,0 +1,64 @@
+{% extends 'bookings/base.html' %}
+
+{% block title %}Book Seats - {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title text-center">🎟️ Book Your Seat</h2>
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h4>{{ movie.title }}</h4>
+                <p>{{ movie.description }}</p>
+                <p class="text-muted">
+                    <strong>Duration:</strong> {{ movie.duration }} minutes<br>
+                    <strong>Release Date:</strong> {{ movie.release_date }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-info">
+                    <h5>Seat Legend:</h5>
+                    <button class="btn btn-success btn-sm">Available</button>
+                    <button class="btn btn-danger btn-sm">Booked</button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        {% if not user.is_authenticated %}
+        <div class="alert alert-warning">
+            <strong>Please login to book seats.</strong>
+            <a href="/admin/login/?next={{ request.path }}" class="btn btn-sm btn-primary">Login</a>
+        </div>
+        {% endif %}
+
+        <h4 class="text-center mb-3">Select Your Seat</h4>
+        <div class="seat-grid">
+            {% for seat in seats %}
+            <form method="post" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="seat_id" value="{{ seat.id }}">
+                <button type="submit" 
+                        class="btn seat-button w-100 {% if seat.booking_status == 'available' %}seat-available{% else %}seat-booked{% endif %}"
+                        {% if seat.booking_status == 'booked' or not user.is_authenticated %}disabled{% endif %}>
+                    {{ seat.seat_number }}
+                </button>
+            </form>
+            {% endfor %}
+        </div>
+
+        {% if not seats %}
+        <div class="alert alert-warning text-center mt-3">
+            No seats available for this movie yet.
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{% url 'movie_list' %}" class="btn btn-secondary">Back to Movies</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
