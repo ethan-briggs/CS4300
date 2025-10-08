@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     "app-ethancs4300-20.devedu.io",
     "localhost",
     "127.0.0.1",
+    "movie-theater-booking-ivz5.onrender.com"
 ]
 
 
